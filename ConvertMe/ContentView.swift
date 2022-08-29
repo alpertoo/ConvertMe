@@ -10,10 +10,39 @@ import SwiftUI
 struct ContentView: View {
     @State private var firstUnitType: String = "Celcius"
     @State private var secondUnitType: String = "Fahrenheit"
-    @State private var userValue: Double = 0
+    @State private var userValue: Double = 100
     @FocusState private var valueIsFocused : Bool
     
     let unitTypes = ["Celcius", "Fahrenheit", "Kelvin"]
+    
+    var convertedValue: String {
+        let valueToCelcius : Double
+        let celciusToSelected: Double
+        
+        switch firstUnitType{
+        case "Fahrenheit" :
+            valueToCelcius = (((userValue - 32)*5)/9)
+        case "Kelvin" :
+            valueToCelcius = (userValue - 273.15)
+        case "Celcius" :
+            valueToCelcius = userValue
+        default: valueToCelcius = userValue
+        }
+        
+        switch secondUnitType{
+        case "Fahrenheit" :
+            celciusToSelected = ((valueToCelcius * 1.8) + 32)
+        case "Kelvin" :
+            celciusToSelected = (valueToCelcius + 273.15)
+        case "Celcius" :
+            celciusToSelected = valueToCelcius
+        default: celciusToSelected = userValue
+        }
+        
+        let finalValueToString = celciusToSelected.formatted()
+        return "\(finalValueToString)"
+    }
+    
     
     var body: some View {
         NavigationView{
@@ -49,7 +78,7 @@ struct ContentView: View {
                 }
                 
                 Section{
-                    Text("0") //Logic will be added
+                    Text(convertedValue)
                 }header: {
                     Text("Converted value:")
                 }
